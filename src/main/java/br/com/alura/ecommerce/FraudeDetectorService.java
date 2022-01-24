@@ -14,8 +14,9 @@ public class FraudeDetectorService {
 
     public static void main(String[] args) {
         var fraudeDetectorService = new FraudeDetectorService();
-        var service = new KafkaService(FraudeDetectorService.class.getSimpleName(), "ECOMMERCE_NEW_ORDER", fraudeDetectorService::parse);
-        service.run();
+        try(var service = new KafkaService(FraudeDetectorService.class.getSimpleName(), "ECOMMERCE_NEW_ORDER", fraudeDetectorService::parse)) {
+            service.run();
+        }
     }
 
     private void parse(ConsumerRecord<String, String> record) {

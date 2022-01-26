@@ -1,0 +1,5 @@
+/Users/julianosantos/development/workspace-cursos/ecommerce/common-kafka/src/main/java/br/com/alura/ecommerce/ConsumerFunction.java
+/Users/julianosantos/development/workspace-cursos/ecommerce/common-kafka/src/main/java/br/com/alura/ecommerce/GSonSerializer.java
+/Users/julianosantos/development/workspace-cursos/ecommerce/common-kafka/src/main/java/br/com/alura/ecommerce/GsonDeserializer.java
+/Users/julianosantos/development/workspace-cursos/ecommerce/common-kafka/src/main/java/br/com/alura/ecommerce/KafkaDispatcher.java
+/Users/julianosantos/development/workspace-cursos/ecommerce/common-kafka/src/main/java/br/com/alura/ecommerce/KafkaService.java

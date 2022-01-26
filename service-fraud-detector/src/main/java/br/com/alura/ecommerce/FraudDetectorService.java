@@ -4,11 +4,11 @@ import org.apache.kafka.clients.consumer.ConsumerRecord;
 
 import java.util.Map;
 
-public class FraudeDetectorService {
+public class FraudDetectorService {
 
     public static void main(String[] args) {
-        var fraudeDetectorService = new FraudeDetectorService();
-        try(var service = new KafkaService<>(FraudeDetectorService.class.getSimpleName(),
+        var fraudeDetectorService = new FraudDetectorService();
+        try(var service = new KafkaService<>(FraudDetectorService.class.getSimpleName(),
                 "ECOMMERCE_NEW_ORDER",
                 fraudeDetectorService::parse,
                 Order.class,

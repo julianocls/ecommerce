@@ -2,6 +2,8 @@ package br.com.alura.ecommerce;
 
 import org.apache.kafka.clients.consumer.ConsumerRecord;
 
+import java.util.Map;
+
 public class FraudeDetectorService {
 
     public static void main(String[] args) {
@@ -9,7 +11,8 @@ public class FraudeDetectorService {
         try(var service = new KafkaService<>(FraudeDetectorService.class.getSimpleName(),
                 "ECOMMERCE_NEW_ORDER",
                 fraudeDetectorService::parse,
-                Order.class)) {
+                Order.class,
+                Map.of())) {
             service.run();
         }
     }

@@ -17,7 +17,7 @@ public class EmailService {
         }
     }
 
-    private void parse(ConsumerRecord<String, Email> record) {
+    private void parse(ConsumerRecord<String, String> record) {
         System.out.println("-----------------------------------------------------------------------------");
         System.out.println("Send Email!");
         System.out.println(record.key());

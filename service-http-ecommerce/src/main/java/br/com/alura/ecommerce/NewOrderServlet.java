@@ -1,6 +1,8 @@
 package br.com.alura.ecommerce;
 
 
+import br.com.alura.ecommerce.dispatcher.KafkaDispatcher;
+
 import javax.servlet.Servlet;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
@@ -11,16 +13,14 @@ import java.math.BigDecimal;
 import java.util.UUID;
 import java.util.concurrent.ExecutionException;
 
-public class ServeltNewOrder extends HttpServlet implements Servlet {
+public class NewOrderServlet extends HttpServlet implements Servlet {
 
     private final KafkaDispatcher<Order> orderDispatcher = new KafkaDispatcher<>();
-    private final KafkaDispatcher<Email> emailDispatcher = new KafkaDispatcher<>();
 
     @Override
     public void destroy() {
         super.destroy();
         orderDispatcher.close();
-        emailDispatcher.close();
     }
 
     @Override
@@ -33,10 +33,7 @@ public class ServeltNewOrder extends HttpServlet implements Servlet {
             var orderId = UUID.randomUUID().toString();
             var order = new Order(orderId, amount, email);
 
-            orderDispatcher.send("ECOMMERCE_NEW_ORDER", email, new CorrelationId(ServeltNewOrder.class.getSimpleName()), order);
-
-            var emailCode = new Email("subject", "Thank for your order! We are processing your order");
-            emailDispatcher.send("ECOMMERCE_SEND_EMAIL", email, new CorrelationId(ServeltNewOrder.class.getSimpleName()), emailCode);
+            orderDispatcher.send("ECOMMERCE_NEW_ORDER", email, new CorrelationId(NewOrderServlet.class.getSimpleName()), order);
 
             System.out.println("New Order sent successfully");
             resp.setStatus(HttpServletResponse.SC_OK);

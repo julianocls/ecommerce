@@ -1,15 +1,13 @@
 package br.com.alura.ecommerce;
 
-import org.apache.kafka.clients.producer.Callback;
-import org.apache.kafka.clients.producer.KafkaProducer;
-import org.apache.kafka.clients.producer.ProducerConfig;
-import org.apache.kafka.clients.producer.ProducerRecord;
+import org.apache.kafka.clients.producer.*;
 import org.apache.kafka.common.serialization.StringSerializer;
 
 import java.io.Closeable;
 import java.util.Properties;
 import java.util.UUID;
 import java.util.concurrent.ExecutionException;
+import java.util.concurrent.Future;
 
 class KafkaDispatcher<T> implements Closeable {
 
@@ -24,23 +22,27 @@ class KafkaDispatcher<T> implements Closeable {
         properties.setProperty(ProducerConfig.BOOTSTRAP_SERVERS_CONFIG, "127.0.0.1:9092");
         properties.setProperty(ProducerConfig.KEY_SERIALIZER_CLASS_CONFIG, StringSerializer.class.getName());
         properties.setProperty(ProducerConfig.VALUE_SERIALIZER_CLASS_CONFIG, GSonSerializer.class.getName());
-        properties.setProperty(ProducerConfig.CLIENT_ID_CONFIG, StringSerializer.class.getSimpleName() + "-" + UUID.randomUUID().toString());
+        properties.setProperty(ProducerConfig.CLIENT_ID_CONFIG, StringSerializer.class.getSimpleName() + "-" + UUID.randomUUID());
         properties.setProperty(ProducerConfig.ACKS_CONFIG, "all");
         return properties;
     }
 
     void send(String topic, String key, CorrelationId id, T payload) throws ExecutionException, InterruptedException {
+        Future<RecordMetadata> future = sendAsync(topic, key, id, payload);
+        future.get();
+    }
+
+    Future<RecordMetadata> sendAsync(String topic, String key, CorrelationId id, T payload) {
         var value = new Message<>(id, payload);
         var record = new ProducerRecord<>(topic, key, value);
         Callback callback = (data, ex) -> {
             if (ex != null) {
                 ex.printStackTrace();
-                return;
             } else {
                 System.out.println("sucesso enviando " + data.topic() + " // :::partition " + data.partition() + " // offset " + data.offset() + " // timestamp " + data.timestamp());
             }
         };
-        producer.send(record, callback).get();
+        return producer.send(record, callback);
     }
 
     @Override

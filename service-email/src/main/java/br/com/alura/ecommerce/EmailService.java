@@ -1,12 +1,12 @@
 package br.com.alura.ecommerce;
 
+import br.com.alura.ecommerce.consumer.ConsumerService;
+import br.com.alura.ecommerce.consumer.ServiceRunner;
 import org.apache.kafka.clients.consumer.ConsumerRecord;
-
-import java.util.concurrent.ExecutionException;
 
 public class EmailService implements ConsumerService<Email> {
 
-    public static void main(String[] args) throws ExecutionException, InterruptedException {
+    public static void main(String[] args) {
         new ServiceRunner(EmailService::new).start(5);
     }
 

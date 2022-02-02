@@ -1,5 +1,7 @@
 package br.com.alura;
 
+import org.w3c.dom.CDATASection;
+
 import java.sql.*;
 
 public class LocalDatabase {
@@ -34,5 +36,9 @@ public class LocalDatabase {
             preparedStatement.setString(i + 1, params[i]);
         }
         return preparedStatement;
+    }
+
+    public void close() throws SQLException {
+        connection.close();
     }
 }
